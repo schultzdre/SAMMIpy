@@ -1,0 +1,7 @@
+README.md
+setup.py
+sammi/__init__.py
+sammi.egg-info/PKG-INFO
+sammi.egg-info/SOURCES.txt
+sammi.egg-info/dependency_links.txt
+sammi.egg-info/top_level.txt
