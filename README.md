@@ -1,6 +1,6 @@
 # SAMMIpy
 
-This package provides a wrapper for running the Semi-Automated Metabolic Map Illustrator (SAMMI) from Python scripts and the Python command line. The SAMMI tool can be found at [www.sammitool.com](https://www.sammitool.com). The package works with the [COBRApy](https://opencobra.github.io/cobrapy/) toolbox and requires an internet connection to render maps.
+This package provides a wrapper for running the Semi-Automated Metabolic Map Illustrator (SAMMI) from Python scripts and the Python command line. The SAMMI tool can be found at [www.sammitool.com](https://www.sammitool.com). The package works with the [COBRApy](https://opencobra.github.io/cobrapy/) toolbox and requires an internet connection to render maps. For more complex, up-to-date examples and to learn how to use the tool please check out the examples in the Jupyter Notebook file.
 
 ## Installation
 
