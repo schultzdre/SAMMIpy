@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: sammi
-Version: 0.0.8
+Version: 0.0.10
 Summary: A wrapper for running the Semi-Automated Metabolic Map Illustrator (SAMMI) using Python
 Home-page: https://github.com/schultzdre/SAMMIpy.git
 Author: Andre Schultz
@@ -8,15 +8,21 @@ Author-email: schultzdre@gmail.com
 License: UNKNOWN
 Description: # SAMMIpy
         
-        This package provides a wrapper for running the Semi-Automated Metabolic Map Illustrator (SAMMI) from Python scripts and the Python command line. The SAMMI tool can be found at [www.sammitool.com](https://www.sammitool.com). The package works with the [COBRApy](https://opencobra.github.io/cobrapy/) toolbox.
+        This package provides a wrapper for running the Semi-Automated Metabolic Map Illustrator (SAMMI) from Python scripts and the Python command line. The SAMMI tool can be found at [www.sammitool.com](https://www.sammitool.com). The package works with the [COBRApy](https://opencobra.github.io/cobrapy/) toolbox and requires an internet connection to render maps.
         
         ## Installation
         
         To install the package run ```pip install sammi``` from the Python command line.
         
+        ## Usage
+        
+        To use the SAMMI package run ```import sammi``` from within your python code. The function ```sammi.plot``` reads the template file ```index.html``` located at ```sammi.__path__[0] + '\\browser'```, and and outputs the generated map to the same folder in the file defined within the function (defaulting to ```index_load.html```). 
+        
+        To open previously generated maps use ```sammi.openmap(htmlName)```. Once maps are generated they can be exported in the SAMMI specific format to be shared and saved.
+        
         ## Help
         
-        For help check ```help(sammi.plot)```.
+        For help using the function check ```help(sammi.plot)```.
         
         ## Examples
         Load the following libraries to get started:

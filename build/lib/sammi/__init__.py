@@ -52,6 +52,8 @@ class options:
     -jscode: Additional javascript code to be run upon loading the model.
     """
     def __init__(self,htmlName = None,load = None,jscode = None):
+        if htmlName == 'index.html' or htmlName == 'index':
+            raise Exception('Output file cannot be named index.html')
         self.htmlName = htmlName if htmlName is not None else 'index_load.html'
         self.load = load if load is not None else True
         self.jscode = jscode if jscode is not None else ''
@@ -60,20 +62,22 @@ class options:
 def makeJson (model):
     #Get reaction fields to include
     rxnfields = []
-    for f in dir(model.reactions[0]):
-        try:
-            if isinstance(getattr(model.reactions[0],f),(str,bool,float,int)) and not f.startswith('_') and not f == 'id':
-                rxnfields.append(f)
-        except:
-            pass
+    for rx in model.reactions:
+        for f in dir(rx):
+            try:
+                if isinstance(getattr(model.reactions[0],f),(str,bool,float,int)) and not f.startswith('_') and not f == 'id' and f not in rxnfields:
+                    rxnfields.append(f)
+            except:
+                pass
     #Get metabolite fields to include
     metfields = []
-    for f in dir(model.metabolites[0]):
-        try:
-            if isinstance(getattr(model.metabolites[0],f),(str,bool,float,int)) and not f.startswith('_') and not f == 'id':
-                metfields.append(f)
-        except:
-            pass
+    for me in model.metabolites:
+        for f in dir(me):
+            try:
+                if isinstance(getattr(model.metabolites[0],f),(str,bool,float,int)) and not f.startswith('_') and not f == 'id' and f not in metfields:
+                    metfields.append(f)
+            except:
+                pass
     #make metabolite fields
     fd = ['{"id":"' + f.id + '",' for f in model.metabolites]
     sep = ','
@@ -86,6 +90,7 @@ def makeJson (model):
             fd = [x + '"' + f + '":' + y + sep for x,y in zip(fd,[str(getattr(g,f)) for g in model.metabolites])]
         if metfields.index(f) == len(metfields)-2:
             sep = '}'
+    fd = [f.replace("\":None,\"","\":NaN,\"") for f in fd]
     #Make JSON string
     jsonstr = '{"metabolites":[' + ','.join(fd) + '],"reactions":['
     #make reaction fields
@@ -97,6 +102,7 @@ def makeJson (model):
             fd = [x + '"' + f + '":' + y + ',' for x,y in zip(fd,[str(getattr(g,f)).lower() for g in model.reactions])]
         else:
             fd = [x + '"' + f + '":' + y + ',' for x,y in zip(fd,[str(getattr(g,f)) for g in model.reactions])]
+    fd = [f.replace("\":None,\"","\":NaN,\"") for f in fd]
     #Make metabolites fields
     metarr = [','.join(['"' + str(x) + '":' + str(y) for x,y in zip(z.metabolites.keys(),z.metabolites.values())]) for z in model.reactions ]
     fd = ','.join([x + '"metabolites":{' + y + '}}' for x,y, in zip(fd,metarr)])
