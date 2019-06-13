@@ -2808,9 +2808,7 @@ function loadWrapper(id) {
 function openDocs(pg) {
     a = document.createElement("a");
     if (pg == "documentation") {
-        a.href = "https://sammi.readthedocs.io/en/latest/index.html";
-    } else if (pg = "documentation") {
-        a.href = "https://sammi.readthedocs.io/en/latest/shortcuts.html";
+        a.href = "https://sammipy.readthedocs.io/en/latest/index.html"; 
     }
     a.target = "_blank";
     div = document.getElementsByClassName("center")[0];
