@@ -2811,7 +2811,7 @@ function openDocs(pg) {
         a.href = "https://sammipy.readthedocs.io/en/latest/index.html"; 
     }
     a.target = "_blank";
-    div = document.getElementsByClassName("center")[0];
+    div = document.getElementById("blankdiv");
     div.appendChild(a);
     a.click();
     a.remove()
