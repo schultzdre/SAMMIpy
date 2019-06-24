@@ -1,5 +1,7 @@
 name = "sammi"
 
+import cobra
+import cobra.test
 import numpy as np
 import os
 
@@ -235,3 +237,216 @@ def plot(model,parsert = [],datat = [],secondaries = [],opts = options()):
 def openmap(htmlName):
     os.system("start \"\" \"" + os.path.dirname(os.path.realpath(__file__)) + "\\browser\\" + htmlName)
     return
+
+def test(n):
+    if n == 0:
+        #Get sample model to plot
+        model = cobra.test.create_test_model("textbook")
+        #Plot file to default index_load.html
+        plot(model)
+    elif n == 1:
+        #Get sample model to plot
+        model = cobra.test.create_test_model("salmonella")
+        #Plot
+        plot(model,'subsystem')
+    elif n == 2:
+        #Get sample model to plot
+        model = cobra.test.create_test_model("textbook")
+        #Plot
+        plot(model,'compartment')
+    elif n == 3:
+        #Get sample model to plot
+        model = cobra.test.create_test_model("salmonella")
+        #Generate options. This will not load a new tab upon generating the visualization
+        opts = options(load = False)
+        #Plot file to default index_load.html
+        plot(model,'subsystem',opts = opts)
+        #Generate option for new name
+        opts = options(htmlName = 'index_load2.html',load = False)
+        #Plot file to default index_load.html
+        plot(model,'compartment',opts = opts)
+        #Open files in new tabs
+        openmap('index_load.html')
+        openmap('index_load2.html')
+    elif n == 4:
+        #Get sample model to plot
+        model = cobra.test.create_test_model("textbook")
+
+        #Define reactions
+        tca = ['ACONTa','ACONTb','AKGDH','CS','FUM','ICDHyr','MDH','SUCOAS']
+        gly = ['ENO','FBA','FBP','GAPD','PDH','PFK','PGI','PGK','PGM','PPS','PYK','TPI']
+        ppp = ['G6PDH2r','GND','PGL','RPE','RPI','TALA','TKT1','TKT2']
+        dat = tca + gly + ppp
+
+        #Define secondaries
+        secondaries = ['^h_.$','^h2o_.$','^atp_.$','^adp_.','^pi_.','^o2_.','^co2_.','^nad_.','^nadh_.','^ndap_.','^ndaph_.']
+
+        #Plot
+        plot(model,dat,secondaries = secondaries)
+    elif n == 5:
+        #Get sample model to plot
+        model = cobra.test.create_test_model("textbook")
+
+        #Define reactions
+        tca = ['ACONTa','ACONTb','AKGDH','CS','FUM','ICDHyr','MDH','SUCOAS']
+        gly = ['ENO','FBA','FBP','GAPD','PDH','PFK','PGI','PGK','PGM','PPS','PYK','TPI']
+        ppp = ['G6PDH2r','GND','PGL','RPE','RPI','TALA','TKT1','TKT2']
+
+        #Initialize class
+        dat = [parser('TCA cycle',tca),
+            parser('Glycolysis/Gluconeogenesis',gly),
+            parser('Pentose Phosphate Pathway',ppp)]
+        #Plot
+        plot(model,dat)
+    elif n == 6:
+        #Get sample model to plot
+        model = cobra.test.create_test_model("textbook")
+
+        #Define reactions
+        tca = ['ACONTa','ACONTb','AKGDH','CS','FUM','ICDHyr','MDH','SUCOAS']
+        gly = ['ENO','FBA','FBP','GAPD','PDH','PFK','PGI','PGK','PGM','PPS','PYK','TPI']
+        ppp = ['G6PDH2r','GND','PGL','RPE','RPI','TALA','TKT1','TKT2']
+
+        #Initialize class
+        dat = [parser('TCA cycle',tca,np.random.rand(len(tca))),
+            parser('Glycolysis/Gluconeogenesis',gly,np.random.rand(len(gly))),
+            parser('Pentose Phosphate Pathway',ppp,np.random.rand(len(ppp)))]
+        #Plot
+        plot(model,dat)
+    elif n == 7:
+        #Get sample model to plot
+        model = cobra.test.create_test_model("salmonella")
+
+        #Get reactions and metabolites
+        rx = [f.id for f in model.reactions]
+        met = [m.id for m in model.metabolites]
+
+        #Generate random data to plot
+        datat = [data('reactions','color',np.random.rand(len(rx),3),rx,['c1','c2','c3']),
+                data('reactions','size',np.random.rand(len(rx),3),rx,['c1','c2','c3']),
+                data('metabolites','color',np.random.rand(len(met),3),met,['c1','c2','c3']),
+                data('metabolites','size',np.random.rand(len(met),3),met,['c1','c2','c3']),
+                data('links','size',np.random.rand(len(rx),3),rx,['c1','c2','c3'])]
+
+        #Introduce NAs
+        for k in range(len(datat)):
+            for i in range(datat[k].data.shape[0]):
+                for j in range(datat[k].data.shape[1]):
+                    if np.random.rand(1)[0] < 0.1:
+                        datat[k].data[i,j] = float('nan')
+
+        #Define secondaries
+        secondaries = ['^h_.$','^h2o_.$','^atp_.$','^adp_.','^pi_.','^o2_.','^co2_.','^nad_.','^nadh_.','^ndap_.','^ndaph_.']
+
+        #Plot
+        plot(model,'subsystem',datat = datat,secondaries = secondaries,opts = options(load=True))
+    elif n == 8:
+        #Get sample model to plot
+        model = cobra.test.create_test_model("salmonella")
+
+        #Get reactions and metabolites
+        rx = [f.id for f in model.reactions]
+        met = [m.id for m in model.metabolites]
+
+        #Generate random data to plot
+        datat = [data('reactions','color',np.random.rand(len(rx),3),rx,['c1','c2','c3']),
+                data('reactions','size',np.random.rand(len(rx),3),rx,['c1','c2','c3']),
+                data('metabolites','color',np.random.rand(len(met),3),met,['c1','c2','c3']),
+                data('metabolites','size',np.random.rand(len(met),3),met,['c1','c2','c3']),
+                data('links','size',np.random.rand(len(rx),3),rx,['c1','c2','c3'])]
+
+        #Introduce NAs
+        for k in range(len(datat)):
+            for i in range(datat[k].data.shape[0]):
+                for j in range(datat[k].data.shape[1]):
+                    if np.random.rand(1)[0] < 0.1:
+                        datat[k].data[i,j] = float('nan')
+
+        #Define secondaries
+        secondaries = ['^h_.$','^h2o_.$','^atp_.$','^adp_.','^pi_.','^o2_.','^co2_.','^nad_.','^nadh_.','^ndap_.','^ndaph_.']
+
+        #Generate javascript
+        jscode = 'x = document.getElementById("onloadf1");' + 'x.value = "Citric Acid Cycle";' + 'onLoadSwitch(x);' + 'document.getElementById("fluxmin").valueAsNumber = -0.1;' + 'document.getElementById("fluxmax").valueAsNumber = 0.1;' + 'fluxmin = -0.1; fluxmax = 0.1;' + 'document.getElementById("edgemin").value = "#ff0000";' + 'document.getElementById("edgemax").value = "#0000ff";' + 'document.getElementById("addrxnbreak").click();' + 'document.getElementsByClassName("rxnbreakval")[0].value = 0;' + 'document.getElementsByClassName("rxnbreakcol")[0].value = "#c0c0c0";' + 'defineFluxColorVectors();'
+
+        #Plot
+        plot(model,'subsystem',datat = datat,secondaries = secondaries,opts = options(load=True,jscode=jscode))
+    elif n == 9:
+        #Import
+        from cobra.flux_analysis import flux_variability_analysis
+        from cobra.flux_analysis.loopless import add_loopless, loopless_solution
+        #Get model and tailor
+        model = cobra.test.create_test_model("salmonella")
+        model.reactions.get_by_id('ATPM').lower_bound = 0
+        model.reactions.get_by_id('ATPM').upper_bound = 1000
+        rxns = [r.id for r in model.reactions]
+        #Close exchange reactions
+        medium = model.medium
+        for i in model.medium:
+            medium[i] = 0.0
+        model.medium = medium
+        #Perform FVA on the model
+        fva = flux_variability_analysis(model,fraction_of_optimum = 0)
+        fva.maximum[fva.maximum < 1e-03] = 0
+        fva.minimum[fva.minimum > -1e-03] = 0
+        #Initialize
+        dat = []
+        #Parse through positive reactions
+        for i in range(len(fva.maximum)):
+            if fva.maximum[i] != 0:
+                model.objective = model.reactions[i]
+                model.optimize()
+                flux = cobra.flux_analysis.pfba(model)
+                flux.fluxes[abs(flux.fluxes) < 1e-3] = 0
+                tmp = abs(flux.fluxes) >= 1e-3
+                dat.append(parser(model.reactions[i].id + ' positive',list(flux.fluxes[tmp].index),list(flux.fluxes[tmp].values)))
+        #Parse through negative reactions
+        for i in range(len(fva.minimum)):
+            if fva.minimum[i] != 0:
+                model.objective = model.reactions[i]
+                model.reactions[i].objective_coefficient = -1
+                flux = model.optimize()
+                flux = cobra.flux_analysis.pfba(model)
+                flux.fluxes[abs(flux.fluxes) < 1e-3] = 0
+                tmp = abs(flux.fluxes) >= 1e-3
+                dat.append(parser(model.reactions[i].id + ' negative',list(flux.fluxes[tmp].index),list(flux.fluxes[tmp].values)))
+        #Plot
+        plot(model,dat)
+    elif n == 10:
+        from cobra.flux_analysis import single_reaction_deletion, moma
+        from cobra.flux_analysis.loopless import add_loopless, loopless_solution
+
+        #Get model
+        model = cobra.test.create_test_model("ecoli")
+        #Set objective
+        model.objective = "Ec_biomass_iJO1366_core_53p95M"
+        #Initialize parsing list
+        dat = []
+        #Define reactions to simulate knockout
+        korxns = ['ENO','FBA','TKT2','TALA','FUM','MDH','GAPD','TPI']
+        #Get original flux
+        solution = model.optimize()
+        flux = loopless_solution(model)
+        #Simulate reaction knockout
+        for r in korxns:
+            with model:
+                #Save original bounds
+                lb = model.reactions.get_by_id(r).lower_bound
+                ub = model.reactions.get_by_id(r).upper_bound
+                #Calculate adaptation
+                model.reactions.get_by_id(r).knock_out()
+                kosolution = model.optimize()
+                koflux = loopless_solution(model)
+                #Save
+                tmp = kosolution.objective_value*(flux.fluxes/solution.objective_value) - koflux.fluxes
+                bol = abs(tmp) > 1e-7
+                x = tmp[bol]
+                x[r] = float('nan')
+                dat.append(parser(r + ' - ' + str(round(kosolution.objective_value,4)),list(x.index),list(x)))
+                #Restore bounds again
+                model.reactions.get_by_id(r).lower_bound = lb
+                model.reactions.get_by_id(r).upper_bound = ub
+        #Define secondaries
+        secondaries = ['^h_.$','^h2o_.$','^atp_.$','^adp_.','^pi_.','^o2_.','^co2_.','^nad_.','^nadh_.','^ndap_.','^ndaph_.',               '^q8_.$','^q8h2_.$','^nadp_.','^nadph_.']
+        #Plot difference in scatterplot
+        plot(model,dat,secondaries = secondaries)
+
