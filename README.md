@@ -17,4 +17,4 @@ To open previously generated maps use ```sammi.openmap(htmlName)```. Once maps a
 
 ## Help
 
-For help check ```help(sammi.plot)``` within Python or read the SAMMIpy documentation [here](https://sammipy.readthedocs.io/en/latest/). Users can also look at the examples provided in the Jupyter Notebook in this folder. All of the examples provided in the notebook can be run using ```sammi.test(n)``` where ```n``` ranges from 0 to ten.
+For help check ```help(sammi.plot)``` within Python or read the SAMMIpy documentation [here](https://sammipy.readthedocs.io/en/latest/). Users can also look at the examples provided in the documentation and the Jupyter Notebook in this folder. All of the examples provided in the notebook can be run using ```sammi.test(n)``` where ```n``` ranges from zero to eleven.

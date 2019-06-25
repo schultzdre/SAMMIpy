@@ -4,6 +4,7 @@ import cobra
 import cobra.test
 import numpy as np
 import os
+import re
 
 #Define sammiparser class
 class parser:
@@ -235,6 +236,8 @@ def plot(model,parsert = [],datat = [],secondaries = [],opts = options()):
         os.system("start \"\" \"" + os.path.dirname(os.path.realpath(__file__)) + "\\browser\\" + opts.htmlName)
 
 def openmap(htmlName):
+    if not bool(re.search("\.html$",htmlName)):
+        htmlName = htmlName + '.html'
     os.system("start \"\" \"" + os.path.dirname(os.path.realpath(__file__)) + "\\browser\\" + htmlName)
     return
 
@@ -278,12 +281,24 @@ def test(n):
         ppp = ['G6PDH2r','GND','PGL','RPE','RPI','TALA','TKT1','TKT2']
         dat = tca + gly + ppp
 
+        #Plot
+        plot(model,dat)
+    elif n == 5:
+        #Get sample model to plot
+        model = cobra.test.create_test_model("textbook")
+
+        #Define reactions
+        tca = ['ACONTa','ACONTb','AKGDH','CS','FUM','ICDHyr','MDH','SUCOAS']
+        gly = ['ENO','FBA','FBP','GAPD','PDH','PFK','PGI','PGK','PGM','PPS','PYK','TPI']
+        ppp = ['G6PDH2r','GND','PGL','RPE','RPI','TALA','TKT1','TKT2']
+        dat = tca + gly + ppp
+
         #Define secondaries
-        secondaries = ['^h_.$','^h2o_.$','^atp_.$','^adp_.','^pi_.','^o2_.','^co2_.','^nad_.','^nadh_.','^ndap_.','^ndaph_.']
+        secondaries = ['^h_.$','^h2o_.$','^atp_.$','^adp_.','^pi_.','^o2_.','^co2_.','^nad_.','^nadh_.','^nadp_.','^nadph_.']
 
         #Plot
         plot(model,dat,secondaries = secondaries)
-    elif n == 5:
+    elif n == 6:
         #Get sample model to plot
         model = cobra.test.create_test_model("textbook")
 
@@ -298,7 +313,7 @@ def test(n):
             parser('Pentose Phosphate Pathway',ppp)]
         #Plot
         plot(model,dat)
-    elif n == 6:
+    elif n == 7:
         #Get sample model to plot
         model = cobra.test.create_test_model("textbook")
 
@@ -313,7 +328,7 @@ def test(n):
             parser('Pentose Phosphate Pathway',ppp,np.random.rand(len(ppp)))]
         #Plot
         plot(model,dat)
-    elif n == 7:
+    elif n == 8:
         #Get sample model to plot
         model = cobra.test.create_test_model("salmonella")
 
@@ -340,7 +355,7 @@ def test(n):
 
         #Plot
         plot(model,'subsystem',datat = datat,secondaries = secondaries,opts = options(load=True))
-    elif n == 8:
+    elif n == 9:
         #Get sample model to plot
         model = cobra.test.create_test_model("salmonella")
 
@@ -370,7 +385,7 @@ def test(n):
 
         #Plot
         plot(model,'subsystem',datat = datat,secondaries = secondaries,opts = options(load=True,jscode=jscode))
-    elif n == 9:
+    elif n == 10:
         #Import
         from cobra.flux_analysis import flux_variability_analysis
         from cobra.flux_analysis.loopless import add_loopless, loopless_solution
@@ -411,7 +426,7 @@ def test(n):
                 dat.append(parser(model.reactions[i].id + ' negative',list(flux.fluxes[tmp].index),list(flux.fluxes[tmp].values)))
         #Plot
         plot(model,dat)
-    elif n == 10:
+    elif n == 11:
         from cobra.flux_analysis import single_reaction_deletion, moma
         from cobra.flux_analysis.loopless import add_loopless, loopless_solution
 

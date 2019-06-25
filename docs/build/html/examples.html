@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Examples &mdash; SAMMIpy 0.0.10 documentation</title>
+  <title>Examples &mdash; SAMMIpy 0.0.12 documentation</title>
   
 
   
@@ -82,15 +82,16 @@
 <li class="toctree-l1"><a class="reference internal" href="classes.html">Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#plot-entire-model">Plot entire model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#divide-the-model-into-subgraphs-using-model-annotation">Divide the model into subgraphs using model annotation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plot-and-visualize-multiple-maps">Plot and visualize multiple maps</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plot-only-user-defined-reactions">Plot only user-defined reactions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#shelve-secondary-metabolites-on-load">Shelve secondary metabolites on load</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plot-multiple-user-defined-subgraphs">Plot multiple user-defined subgraphs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#data-mapping">Data mapping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#change-map-upon-load">Change map upon load</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#metabolic-adaptation">Metabolic Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plot-entire-model">0. Plot entire model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#divide-the-model-into-subgraphs-using-model-annotation">1-2. Divide the model into subgraphs using model annotation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plot-and-visualize-multiple-maps">3. Plot and visualize multiple maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plot-only-user-defined-reactions">4. Plot only user-defined reactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#shelve-secondary-metabolites-on-load">5. Shelve secondary metabolites on load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plot-multiple-user-defined-subgraphs">6. Plot multiple user-defined subgraphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-mapping">7-8. Data mapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#change-map-upon-load">9. Change map upon load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#type-iii-pathways">10. Type-III Pathways</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#metabolic-adaptation">11. Metabolic Adaptation</a></li>
 </ul>
 </li>
 </ul>
@@ -159,7 +160,7 @@
             
   <div class="section" id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<p>Here we provide several simple examples for the use of SAMMIpy. Each example is supposed to be more complex than the next, and is intended to exemplify as many different functionalities of SAMMIpy as possible.</p>
+<p>Here we provide several simple examples for the use of SAMMIpy. Each example is supposed to be more complex than the next, and is intended to exemplify as many different functionalities of SAMMIpy as possible. Each example can be run using <code class="code docutils literal notranslate"><span class="pre">sammi.test(n)</span></code>, where <code class="code docutils literal notranslate"><span class="pre">n</span></code> refers to the example number provided here.</p>
 <p>To start, load the following libraries:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cobra</span>
 <span class="kn">import</span> <span class="nn">cobra.test</span>
@@ -168,7 +169,7 @@
 </pre></div>
 </div>
 <div class="section" id="plot-entire-model">
-<h2>Plot entire model<a class="headerlink" href="#plot-entire-model" title="Permalink to this headline">¶</a></h2>
+<h2>0. Plot entire model<a class="headerlink" href="#plot-entire-model" title="Permalink to this headline">¶</a></h2>
 <p>To plot the entire model simply call <code class="code docutils literal notranslate"><span class="pre">sammi.plot()</span></code> on the COBRA model. This is not advisable for medium to large models as the visualization may be too large to render.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;textbook&quot;</span><span class="p">)</span>
@@ -178,15 +179,19 @@
 </div>
 </div>
 <div class="section" id="divide-the-model-into-subgraphs-using-model-annotation">
-<h2>Divide the model into subgraphs using model annotation<a class="headerlink" href="#divide-the-model-into-subgraphs-using-model-annotation" title="Permalink to this headline">¶</a></h2>
-<p>Maps can be divided into subgraphs using model annotation. For instance, users can plot a subgraph for each annotated reaction subsystem:</p>
+<h2>1-2. Divide the model into subgraphs using model annotation<a class="headerlink" href="#divide-the-model-into-subgraphs-using-model-annotation" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Maps can be divided into subgraphs using model annotation. For instance, users can plot a subgraph for each annotated reaction subsystem:</li>
+</ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;salmonella&quot;</span><span class="p">)</span>
 <span class="c1">#Plot</span>
 <span class="n">sammi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="s1">&#39;subsystem&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Or plot a map for each cellular compartment:</p>
+<ol class="arabic simple" start="2">
+<li>Or plot a map for each cellular compartment:</li>
+</ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;textbook&quot;</span><span class="p">)</span>
 <span class="c1">#Plot</span>
@@ -195,7 +200,7 @@
 </div>
 </div>
 <div class="section" id="plot-and-visualize-multiple-maps">
-<h2>Plot and visualize multiple maps<a class="headerlink" href="#plot-and-visualize-multiple-maps" title="Permalink to this headline">¶</a></h2>
+<h2>3. Plot and visualize multiple maps<a class="headerlink" href="#plot-and-visualize-multiple-maps" title="Permalink to this headline">¶</a></h2>
 <p>By default, SAMMI outputs the visualization to a file names <code class="code docutils literal notranslate"><span class="pre">index.load.html</span></code> in the package folder. Therefore, by default, every time a new visualization is generated this file is overwritten. The name of the output file can be changed, however, in order to not overwrite files. For instance:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;salmonella&quot;</span><span class="p">)</span>
@@ -214,7 +219,7 @@
 </div>
 </div>
 <div class="section" id="plot-only-user-defined-reactions">
-<h2>Plot only user-defined reactions<a class="headerlink" href="#plot-only-user-defined-reactions" title="Permalink to this headline">¶</a></h2>
+<h2>4. Plot only user-defined reactions<a class="headerlink" href="#plot-only-user-defined-reactions" title="Permalink to this headline">¶</a></h2>
 <p>For a quick visualization of a given group of reactions users can plot only certain reactions in a single graph.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;textbook&quot;</span><span class="p">)</span>
@@ -231,7 +236,7 @@
 </div>
 </div>
 <div class="section" id="shelve-secondary-metabolites-on-load">
-<h2>Shelve secondary metabolites on load<a class="headerlink" href="#shelve-secondary-metabolites-on-load" title="Permalink to this headline">¶</a></h2>
+<h2>5. Shelve secondary metabolites on load<a class="headerlink" href="#shelve-secondary-metabolites-on-load" title="Permalink to this headline">¶</a></h2>
 <p>In order to shelve secondary metabolites upon rendering the model, define the <code class="code docutils literal notranslate"><span class="pre">secondaries</span></code> input to the plot function. If this argument is defined, any metabolite, matching any of the defined regular expressions, will be shelved. These metabolites can be returned to the graph using the floating menu window.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;textbook&quot;</span><span class="p">)</span>
@@ -243,7 +248,7 @@
 <span class="n">dat</span> <span class="o">=</span> <span class="n">tca</span> <span class="o">+</span> <span class="n">gly</span> <span class="o">+</span> <span class="n">ppp</span>
 
 <span class="c1">#Define secondaries</span>
-<span class="n">secondaries</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;^h_.$&#39;</span><span class="p">,</span><span class="s1">&#39;^h2o_.$&#39;</span><span class="p">,</span><span class="s1">&#39;^atp_.$&#39;</span><span class="p">,</span><span class="s1">&#39;^adp_.&#39;</span><span class="p">,</span><span class="s1">&#39;^pi_.&#39;</span><span class="p">,</span><span class="s1">&#39;^o2_.&#39;</span><span class="p">,</span><span class="s1">&#39;^co2_.&#39;</span><span class="p">,</span><span class="s1">&#39;^nad_.&#39;</span><span class="p">,</span><span class="s1">&#39;^nadh_.&#39;</span><span class="p">,</span><span class="s1">&#39;^ndap_.&#39;</span><span class="p">,</span><span class="s1">&#39;^ndaph_.&#39;</span><span class="p">]</span>
+<span class="n">secondaries</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;^h_.$&#39;</span><span class="p">,</span><span class="s1">&#39;^h2o_.$&#39;</span><span class="p">,</span><span class="s1">&#39;^atp_.$&#39;</span><span class="p">,</span><span class="s1">&#39;^adp_.&#39;</span><span class="p">,</span><span class="s1">&#39;^pi_.&#39;</span><span class="p">,</span><span class="s1">&#39;^o2_.&#39;</span><span class="p">,</span><span class="s1">&#39;^co2_.&#39;</span><span class="p">,</span><span class="s1">&#39;^nad_.&#39;</span><span class="p">,</span><span class="s1">&#39;^nadh_.&#39;</span><span class="p">,</span><span class="s1">&#39;^nadp_.&#39;</span><span class="p">,</span><span class="s1">&#39;^nadph_.&#39;</span><span class="p">]</span>
 
 <span class="c1">#Plot</span>
 <span class="n">sammi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">dat</span><span class="p">,</span><span class="n">secondaries</span> <span class="o">=</span> <span class="n">secondaries</span><span class="p">)</span>
@@ -251,7 +256,7 @@
 </div>
 </div>
 <div class="section" id="plot-multiple-user-defined-subgraphs">
-<h2>Plot multiple user-defined subgraphs<a class="headerlink" href="#plot-multiple-user-defined-subgraphs" title="Permalink to this headline">¶</a></h2>
+<h2>6. Plot multiple user-defined subgraphs<a class="headerlink" href="#plot-multiple-user-defined-subgraphs" title="Permalink to this headline">¶</a></h2>
 <p>Users can also plot multiple subgraphs with their defined reactions. To do so, define an instance of <code class="code docutils literal notranslate"><span class="pre">sammi.parser()</span></code> for each subgraph:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;textbook&quot;</span><span class="p">)</span>
@@ -271,8 +276,10 @@
 </div>
 </div>
 <div class="section" id="data-mapping">
-<h2>Data mapping<a class="headerlink" href="#data-mapping" title="Permalink to this headline">¶</a></h2>
-<p>Add data to plotted subgraphs. In this example we are generating random data and mapping it onto the desired reactions. Using <code class="code docutils literal notranslate"><span class="pre">sammi.parser()</span></code> users can directly map data as reaction colors:</p>
+<h2>7-8. Data mapping<a class="headerlink" href="#data-mapping" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple" start="7">
+<li>Add data to plotted subgraphs. In this example we are generating random data and mapping it onto the desired reactions. Using <code class="code docutils literal notranslate"><span class="pre">sammi.parser()</span></code> users can directly map data as reaction colors:</li>
+</ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;textbook&quot;</span><span class="p">)</span>
 
@@ -289,7 +296,9 @@
 <span class="n">sammi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">dat</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Alternatively, users can map data onto the map using <code class="code docutils literal notranslate"><span class="pre">sammi.data()</span></code>. The following example maps five sets of random data, each in a different way, with three conditions each.</p>
+<ol class="arabic simple" start="8">
+<li>Alternatively, users can map data onto the map using <code class="code docutils literal notranslate"><span class="pre">sammi.data()</span></code>. The following example maps five sets of random data, each in a different way, with three conditions each.</li>
+</ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;salmonella&quot;</span><span class="p">)</span>
 
@@ -320,7 +329,7 @@
 </div>
 </div>
 <div class="section" id="change-map-upon-load">
-<h2>Change map upon load<a class="headerlink" href="#change-map-upon-load" title="Permalink to this headline">¶</a></h2>
+<h2>9. Change map upon load<a class="headerlink" href="#change-map-upon-load" title="Permalink to this headline">¶</a></h2>
 <p>SAMMI options also allow users to change visualization parameters upon loading the model. This can be done by adding JavaScript code to the end of the visualization. To use this advanced feature users need to be familiar with JavaScript and need to familiarize themselves with the SAMMI visualization html layout. The following code loads the previous map, changes the visualization to the Citric Acid Cycle subgraph, and changes the colorscale upon loading.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;salmonella&quot;</span><span class="p">)</span>
@@ -365,8 +374,54 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="type-iii-pathways">
+<h2>10. Type-III Pathways<a class="headerlink" href="#type-iii-pathways" title="Permalink to this headline">¶</a></h2>
+<p>Type-III pathways are thermodynamically infeasible loops within the model that do not involve exchange reactions. Here we visualize some of these pathways. We first block all exchange reactions and perform FVA to determine reactions still able to carry flux. Next, we optimize each of these reactions using pFBA to determine the smallest possible Type-III pathway involving the reaction. This example might take a couple of minutes to run.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Import</span>
+<span class="kn">from</span> <span class="nn">cobra.flux_analysis</span> <span class="kn">import</span> <span class="n">flux_variability_analysis</span>
+<span class="kn">from</span> <span class="nn">cobra.flux_analysis.loopless</span> <span class="kn">import</span> <span class="n">add_loopless</span><span class="p">,</span> <span class="n">loopless_solution</span>
+<span class="c1">#Get model and tailor</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;salmonella&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">reactions</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span><span class="s1">&#39;ATPM&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">model</span><span class="o">.</span><span class="n">reactions</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span><span class="s1">&#39;ATPM&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">rxns</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">reactions</span><span class="p">]</span>
+<span class="c1">#Close exchange reactions</span>
+<span class="n">medium</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">medium</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">medium</span><span class="p">:</span>
+    <span class="n">medium</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">model</span><span class="o">.</span><span class="n">medium</span> <span class="o">=</span> <span class="n">medium</span>
+<span class="c1">#Perform FVA on the model</span>
+<span class="n">fva</span> <span class="o">=</span> <span class="n">flux_variability_analysis</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fraction_of_optimum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">fva</span><span class="o">.</span><span class="n">maximum</span><span class="p">[</span><span class="n">fva</span><span class="o">.</span><span class="n">maximum</span> <span class="o">&lt;</span> <span class="mf">1e-03</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">fva</span><span class="o">.</span><span class="n">minimum</span><span class="p">[</span><span class="n">fva</span><span class="o">.</span><span class="n">minimum</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">1e-03</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c1">#Initialize</span>
+<span class="n">dat</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1">#Parse through positive reactions</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fva</span><span class="o">.</span><span class="n">maximum</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">fva</span><span class="o">.</span><span class="n">maximum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">objective</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">reactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+        <span class="n">flux</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">flux_analysis</span><span class="o">.</span><span class="n">pfba</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">flux</span><span class="o">.</span><span class="n">fluxes</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">flux</span><span class="o">.</span><span class="n">fluxes</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">flux</span><span class="o">.</span><span class="n">fluxes</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">1e-3</span>
+        <span class="n">dat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sammi</span><span class="o">.</span><span class="n">parser</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">reactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s1">&#39; positive&#39;</span><span class="p">,</span><span class="nb">list</span><span class="p">(</span><span class="n">flux</span><span class="o">.</span><span class="n">fluxes</span><span class="p">[</span><span class="n">tmp</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">),</span><span class="nb">list</span><span class="p">(</span><span class="n">flux</span><span class="o">.</span><span class="n">fluxes</span><span class="p">[</span><span class="n">tmp</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)))</span>
+<span class="c1">#Parse through negative reactions</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fva</span><span class="o">.</span><span class="n">minimum</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">fva</span><span class="o">.</span><span class="n">minimum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">objective</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">reactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">reactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">objective_coefficient</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">flux</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+        <span class="n">flux</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">flux_analysis</span><span class="o">.</span><span class="n">pfba</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">flux</span><span class="o">.</span><span class="n">fluxes</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">flux</span><span class="o">.</span><span class="n">fluxes</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">flux</span><span class="o">.</span><span class="n">fluxes</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">1e-3</span>
+        <span class="n">dat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sammi</span><span class="o">.</span><span class="n">parser</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">reactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s1">&#39; negative&#39;</span><span class="p">,</span><span class="nb">list</span><span class="p">(</span><span class="n">flux</span><span class="o">.</span><span class="n">fluxes</span><span class="p">[</span><span class="n">tmp</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">),</span><span class="nb">list</span><span class="p">(</span><span class="n">flux</span><span class="o">.</span><span class="n">fluxes</span><span class="p">[</span><span class="n">tmp</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)))</span>
+<span class="c1">#Plot</span>
+<span class="n">sammi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">dat</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="metabolic-adaptation">
-<h2>Metabolic Adaptation<a class="headerlink" href="#metabolic-adaptation" title="Permalink to this headline">¶</a></h2>
+<h2>11. Metabolic Adaptation<a class="headerlink" href="#metabolic-adaptation" title="Permalink to this headline">¶</a></h2>
 <p>Visualize adaptation to gene knockout. In short, the following code performs the following steps for each reaction we wish to simulate.</p>
 <ol class="arabic simple">
 <li>Simulate reaction knockout and get maximum growth rate on KO model.</li>
@@ -374,7 +429,7 @@
 <li>Using MOMA, calculate a flux distribution in the knockout strain that closely matches the flux distribution in the previous step.</li>
 <li>Find the difference in flux distributions in steps two and three and plot them.</li>
 </ol>
-<p>This process allows users to visualize how the flux was rewired in the knockout strain.</p>
+<p>This process allows users to visualize how the flux was rewired in the knockout strain. This example may take a couple of minutes to run.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cobra.flux_analysis</span> <span class="kn">import</span> <span class="n">single_reaction_deletion</span><span class="p">,</span> <span class="n">moma</span>
 <span class="kn">from</span> <span class="nn">cobra.flux_analysis.loopless</span> <span class="kn">import</span> <span class="n">add_loopless</span><span class="p">,</span> <span class="n">loopless_solution</span>
 

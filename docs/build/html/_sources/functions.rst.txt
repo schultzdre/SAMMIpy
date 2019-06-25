@@ -1,6 +1,6 @@
 Functions
 ==============
-There are two main user functions for rendering and plotting SAMMI visualizations. These are:
+There are three main user functions for rendering and plotting SAMMI visualizations. These are:
 
 Plotting
 --------------
@@ -19,4 +19,8 @@ The function :code:`sammi.plot()` is used to plot SAMMI visualizations in combin
 
 Opening a visualization
 --------------------------
-the function :code:`sammi.openmap()` is used for opening previously drawn visualizations. It takes a single input: a previously drawn html file name.
+the function :code:`sammi.openmap()` is used for opening previously drawn visualizations. It takes a single input: a previously drawn html file name. For instance, :code:`sammi.openmap("index_load.html")` or :code:`sammi.openmap("index_load")` open the default file to which maps are exported.
+
+Running SAMMIpy example
+----------------------------
+Several examples are built into the SAMMIpy package to exemplify and test the package functionalities. These examples are described in the following section as well as the Jupyter Notebook provided. To use this function run :code:`sammi.test(n)` where :code:`n` is a number from zero to eleven describing one of the examples.

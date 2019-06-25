@@ -1,6 +1,6 @@
 Examples
 ==============
-Here we provide several simple examples for the use of SAMMIpy. Each example is supposed to be more complex than the next, and is intended to exemplify as many different functionalities of SAMMIpy as possible.
+Here we provide several simple examples for the use of SAMMIpy. Each example is supposed to be more complex than the next, and is intended to exemplify as many different functionalities of SAMMIpy as possible. Each example can be run using :code:`sammi.test(n)`, where :code:`n` refers to the example number provided here.
 
 To start, load the following libraries:
 
@@ -11,8 +11,8 @@ To start, load the following libraries:
     import numpy as np
     import sammi
 
-Plot entire model
------------------------
+0. Plot entire model
+-------------------------
 To plot the entire model simply call :code:`sammi.plot()` on the COBRA model. This is not advisable for medium to large models as the visualization may be too large to render.
 
 .. code-block:: python
@@ -22,9 +22,9 @@ To plot the entire model simply call :code:`sammi.plot()` on the COBRA model. Th
     #Plot file to default index_load.html
     sammi.plot(model)
 
-Divide the model into subgraphs using model annotation
-----------------------------------------------------------
-Maps can be divided into subgraphs using model annotation. For instance, users can plot a subgraph for each annotated reaction subsystem:
+1-2. Divide the model into subgraphs using model annotation
+---------------------------------------------------------------------------
+1. Maps can be divided into subgraphs using model annotation. For instance, users can plot a subgraph for each annotated reaction subsystem:
 
 .. code-block:: python
 
@@ -33,7 +33,7 @@ Maps can be divided into subgraphs using model annotation. For instance, users c
     #Plot
     sammi.plot(model,'subsystem')
 
-Or plot a map for each cellular compartment:
+2. Or plot a map for each cellular compartment:
 
 .. code-block:: python
 
@@ -42,8 +42,8 @@ Or plot a map for each cellular compartment:
     #Plot
     sammi.plot(model,'compartment')
 
-Plot and visualize multiple maps
--------------------------------------
+3. Plot and visualize multiple maps
+----------------------------------------
 By default, SAMMI outputs the visualization to a file names :code:`index.load.html` in the package folder. Therefore, by default, every time a new visualization is generated this file is overwritten. The name of the output file can be changed, however, in order to not overwrite files. For instance:
 
 .. code-block:: python
@@ -62,8 +62,8 @@ By default, SAMMI outputs the visualization to a file names :code:`index.load.ht
     sammi.openmap('index_load.html')
     sammi.openmap('index_load2.html')
 
-Plot only user-defined reactions
------------------------------------------
+4. Plot only user-defined reactions
+-------------------------------------------
 For a quick visualization of a given group of reactions users can plot only certain reactions in a single graph.
 
 .. code-block:: python
@@ -80,8 +80,8 @@ For a quick visualization of a given group of reactions users can plot only cert
     #Plot
     sammi.plot(model,dat)
 
-Shelve secondary metabolites on load
------------------------------------------
+5. Shelve secondary metabolites on load
+--------------------------------------------
 In order to shelve secondary metabolites upon rendering the model, define the :code:`secondaries` input to the plot function. If this argument is defined, any metabolite, matching any of the defined regular expressions, will be shelved. These metabolites can be returned to the graph using the floating menu window.
 
 .. code-block:: python
@@ -96,12 +96,12 @@ In order to shelve secondary metabolites upon rendering the model, define the :c
     dat = tca + gly + ppp
 
     #Define secondaries
-    secondaries = ['^h_.$','^h2o_.$','^atp_.$','^adp_.','^pi_.','^o2_.','^co2_.','^nad_.','^nadh_.','^ndap_.','^ndaph_.']
+    secondaries = ['^h_.$','^h2o_.$','^atp_.$','^adp_.','^pi_.','^o2_.','^co2_.','^nad_.','^nadh_.','^nadp_.','^nadph_.']
 
     #Plot
     sammi.plot(model,dat,secondaries = secondaries)
 
-Plot multiple user-defined subgraphs
+6. Plot multiple user-defined subgraphs
 -----------------------------------------------
 Users can also plot multiple subgraphs with their defined reactions. To do so, define an instance of :code:`sammi.parser()` for each subgraph:
 
@@ -122,9 +122,9 @@ Users can also plot multiple subgraphs with their defined reactions. To do so, d
     #Plot
     sammi.plot(model,dat)
 
-Data mapping
-----------------
-Add data to plotted subgraphs. In this example we are generating random data and mapping it onto the desired reactions. Using :code:`sammi.parser()` users can directly map data as reaction colors:
+7-8. Data mapping
+-----------------------
+7. Add data to plotted subgraphs. In this example we are generating random data and mapping it onto the desired reactions. Using :code:`sammi.parser()` users can directly map data as reaction colors:
 
 .. code-block:: python
 
@@ -143,7 +143,7 @@ Add data to plotted subgraphs. In this example we are generating random data and
     #Plot
     sammi.plot(model,dat)
 
-Alternatively, users can map data onto the map using :code:`sammi.data()`. The following example maps five sets of random data, each in a different way, with three conditions each.
+8. Alternatively, users can map data onto the map using :code:`sammi.data()`. The following example maps five sets of random data, each in a different way, with three conditions each.
 
 .. code-block:: python
 
@@ -174,7 +174,7 @@ Alternatively, users can map data onto the map using :code:`sammi.data()`. The f
     #Plot
     sammi.plot(model,'subsystem',datat = datat,secondaries = secondaries,opts = sammi.options(load=True))
 
-Change map upon load
+9. Change map upon load
 -----------------------------
 SAMMI options also allow users to change visualization parameters upon loading the model. This can be done by adding JavaScript code to the end of the visualization. To use this advanced feature users need to be familiar with JavaScript and need to familiarize themselves with the SAMMI visualization html layout. The following code loads the previous map, changes the visualization to the Citric Acid Cycle subgraph, and changes the colorscale upon loading.
 
@@ -221,7 +221,55 @@ SAMMI options also allow users to change visualization parameters upon loading t
     #Plot
     sammi.plot(model,'subsystem',datat = datat,secondaries = secondaries,opts = sammi.options(load=True,jscode=jscode))
 
-Metabolic Adaptation
+10. Type-III Pathways
+-------------------------
+
+Type-III pathways are thermodynamically infeasible loops within the model that do not involve exchange reactions. Here we visualize some of these pathways. We first block all exchange reactions and perform FVA to determine reactions still able to carry flux. Next, we optimize each of these reactions using pFBA to determine the smallest possible Type-III pathway involving the reaction. This example might take a couple of minutes to run.
+
+.. code-block:: python
+
+    #Import
+    from cobra.flux_analysis import flux_variability_analysis
+    from cobra.flux_analysis.loopless import add_loopless, loopless_solution
+    #Get model and tailor
+    model = cobra.test.create_test_model("salmonella")
+    model.reactions.get_by_id('ATPM').lower_bound = 0
+    model.reactions.get_by_id('ATPM').upper_bound = 1000
+    rxns = [r.id for r in model.reactions]
+    #Close exchange reactions
+    medium = model.medium
+    for i in model.medium:
+        medium[i] = 0.0
+    model.medium = medium
+    #Perform FVA on the model
+    fva = flux_variability_analysis(model,fraction_of_optimum = 0)
+    fva.maximum[fva.maximum < 1e-03] = 0
+    fva.minimum[fva.minimum > -1e-03] = 0
+    #Initialize
+    dat = []
+    #Parse through positive reactions
+    for i in range(len(fva.maximum)):
+        if fva.maximum[i] != 0:
+            model.objective = model.reactions[i]
+            model.optimize()
+            flux = cobra.flux_analysis.pfba(model)
+            flux.fluxes[abs(flux.fluxes) < 1e-3] = 0
+            tmp = abs(flux.fluxes) >= 1e-3
+            dat.append(sammi.parser(model.reactions[i].id + ' positive',list(flux.fluxes[tmp].index),list(flux.fluxes[tmp].values)))
+    #Parse through negative reactions
+    for i in range(len(fva.minimum)):
+        if fva.minimum[i] != 0:
+            model.objective = model.reactions[i]
+            model.reactions[i].objective_coefficient = -1
+            flux = model.optimize()
+            flux = cobra.flux_analysis.pfba(model)
+            flux.fluxes[abs(flux.fluxes) < 1e-3] = 0
+            tmp = abs(flux.fluxes) >= 1e-3
+            dat.append(sammi.parser(model.reactions[i].id + ' negative',list(flux.fluxes[tmp].index),list(flux.fluxes[tmp].values)))
+    #Plot
+    sammi.plot(model,dat)
+
+11. Metabolic Adaptation
 ------------------------
 Visualize adaptation to gene knockout. In short, the following code performs the following steps for each reaction we wish to simulate.
 
@@ -230,7 +278,7 @@ Visualize adaptation to gene knockout. In short, the following code performs the
 3. Using MOMA, calculate a flux distribution in the knockout strain that closely matches the flux distribution in the previous step.
 4. Find the difference in flux distributions in steps two and three and plot them.
 
-This process allows users to visualize how the flux was rewired in the knockout strain.
+This process allows users to visualize how the flux was rewired in the knockout strain. This example may take a couple of minutes to run.
 
 .. code-block:: python
 

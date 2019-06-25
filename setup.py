@@ -8,7 +8,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="sammi",
-    version="0.0.14",
+    version="0.0.15",
     author="Andre Schultz",
     author_email="schultzdre@gmail.com",
     description="A wrapper for running the Semi-Automated Metabolic Map Illustrator (SAMMI) using Python",

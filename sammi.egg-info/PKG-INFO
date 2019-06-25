@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: sammi
-Version: 0.0.14
+Version: 0.0.15
 Summary: A wrapper for running the Semi-Automated Metabolic Map Illustrator (SAMMI) using Python
 Home-page: https://github.com/schultzdre/SAMMIpy.git
 Author: Andre Schultz
@@ -25,7 +25,7 @@ Description: # SAMMIpy
         
         ## Help
         
-        For help check ```help(sammi.plot)``` within Python or read the SAMMIpy documentation [here](https://sammipy.readthedocs.io/en/latest/). Users can also look at the examples provided in the Jupyter Notebook in this folder. All of the examples provided in the notebook can be run using ```sammi.test(n)``` where ```n``` ranges from 0 to ten.
+        For help check ```help(sammi.plot)``` within Python or read the SAMMIpy documentation [here](https://sammipy.readthedocs.io/en/latest/). Users can also look at the examples provided in the documentation and the Jupyter Notebook in this folder. All of the examples provided in the notebook can be run using ```sammi.test(n)``` where ```n``` ranges from zero to eleven.
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
