@@ -178,7 +178,6 @@ function receivedTextSammi(e) {
         wind.appendChild(br);
         var select = document.createElement("select");
         select.id = "fluxscroll"
-        select.setAttribute('oldvalue',ttls[0]);
         select.onchange = function() {FluxSetSwitch(this)};
         for (var i = 0; i < ttls.length; i++) {
             var option = document.createElement("option");
@@ -214,7 +213,6 @@ function receivedTextSammi(e) {
         wind.appendChild(br);
         var select = document.createElement("select");
         select.id = "concscroll"
-        select.setAttribute('oldvalue',ttls[0]);
         select.onchange = function() {ConcSetSwitch(this)};
         for (var i = 0; i < ttls.length; i++) {
             var option = document.createElement("option");
@@ -616,6 +614,7 @@ function onLoadSwitch(d) {
     simulation.restart()
 
     defineSuspended()
+    clearBackup()
 
     if (document.getElementById("dialog2").style.display == "block") {joinSubGraphs()}
 }
@@ -754,16 +753,19 @@ function previousScrollF(nodeid) {
 }
 function FluxSetSwitch(opt) {
     if(tracking){trackMet()}
-    //Save color
-    var id = fluxobj.ttls.indexOf(opt.attributes.oldvalue.value);
-    fluxobj.rcs[id] = rxncolor;
-    fluxobj.rcbs[id] = rxncolorbreaks;
-    //Define index to switch it to
-    opt.setAttribute('oldvalue',opt.value);
-    var id = fluxobj.ttls.indexOf(opt.value);
-    //Remove previous color breaks
-    x = document.getElementsByClassName("rxnbreakcol");
-    while (x.length > 0) {x[0].nextElementSibling.click()}
+   //Define index to switch it to
+   var id = opt.selectedIndex;
+   //Remove previous color breaks
+   var x = document.getElementsByClassName("rxnbreakcol");
+   while (x.length > 0) {
+       var tmp = x[0].nextSibling
+       tmp.previousSibling.previousSibling.remove()
+       tmp.previousSibling.remove()
+       tmp.nextSibling.remove()
+       tmp.remove()
+       delete tmp;
+       var x = document.getElementsByClassName("rxnbreakcol");
+   }
     //Reset color breaks
     rxncolorbreaks = fluxobj.rcbs[id];
     rxncolor = fluxobj.rcs[id]
@@ -775,7 +777,6 @@ function FluxSetSwitch(opt) {
     document.getElementById("edgemin").value = rgbToHex(rxncolor[0]);
     if (rxncolorbreaks.length > 2) {
         for (var i = 1; i < rxncolorbreaks.length-1; i++) {
-            console.log(i)
             addReactionColorBreak(document.getElementById("addrxnbreak"));
             var vec = document.getElementsByClassName("rxnbreakval");
             vec[vec.length-1].valueAsNumber = rxncolorbreaks[i];
@@ -784,7 +785,6 @@ function FluxSetSwitch(opt) {
         }
     }
     defineFluxColorBar()
-
     //Reset all values to null
     for (j in parsedmodels) {
         parsedmodels[j].nodes.forEach(function(d){
@@ -914,7 +914,95 @@ function loadFileFlux() {
         fr.onload = receivedTextFlux;
         fr.readAsText(file);
 }
+function loadFileGene() {
+    var input, file, fr;
+    input = document.getElementById('fileinputgene');
+        file = input.files[0];
+        fr = new FileReader();
+        fr.onload = receivedTextGene;
+        fr.readAsText(file);
+}
+function receivedTextGene(e) {
+    e = e.target.result.split(/\r\n|\r|\n/);
+    //Gell all reactions and genes
+    allrx = [];
+    allgr = [];
+    //Get gene-reaction rule field
+    grr = document.getElementById("gexfield").value;
+    //get characters to remove
+    grrem = document.getElementById("gexrem").value;
+    grrem = '(' + grrem.replace(/;/g,')|(') + ')'
+    var grrem = new RegExp(grrem,'g');
+    //get characters to split
+    grspl = document.getElementById("gexsplit").value;
+    grspl = '[' + grspl.replace(/;/g,',') + ']'
+    var grspl = new RegExp(grspl,'i');
+    //parse
+    for (var g in parsedmodels) {
+        for (n in parsedmodels[g].nodes) { 
+            d = parsedmodels[g].nodes[n];
+            if (d.group == 2) {continue;}
+            if (allrx.indexOf(d.id) == -1){
+                allrx.push(d.id)
+                tmp = d[grr]
+                tmp = tmp.replace(grrem,'')
+                tmp = tmp.split(grspl)
+                for (var i = tmp.length - 1; i >= 0; i--) {
+                    if (tmp[i] == "") {tmp.splice(i,1); continue}
+                    tmp[i] = tmp[i].trim()
+                }
+                allgr.push(tmp.filter(onlyUnique))
+            }
+        }
+    }
+    //make gex object
+    gex = {};
+    for (var i = 1; i < e.length; i++) {
+        tmp = e[i].split('\t')
+        if(tmp.length == 1) {continue}
+        tmp = tmp.map(function(d,i){if(i == 0){return d}else{return Number(d)}})
+        lab = tmp.shift();
+        gex[lab] = tmp;
+    }
+    n = gex[Object.keys(gex)[1]].length
 
+    //Map to reaction values
+    tmp = e[0];
+    for (var i = 0; i < allrx.length; i++) {
+        if (allgr[i].length == 0) {continue}
+        var z = [];
+        for (var j = 0; j < n; j++){z.push([])};
+        allgr[i].map(function(d){if (d in gex) {gex[d].map(function(l,j){z[j].push(l)})}})
+        
+        mapfun = document.getElementById('gexmap').value;
+        if (mapfun == "Max") {
+            z = z.map(function(d){return Math.max(...d)})
+        } else if (mapfun == "Min") {
+            z = z.map(function(d){return Math.min(...d)})
+        } else if (mapfun == "Mean") {
+            z = z.map(function(d){
+                sum = d.reduce(function(a, b) { return a + b; });
+                return sum / d.length;
+            })
+        } else if (mapfun == "Median") {
+            z = z.map(function(d){
+                d = d.sort()
+                if (d.length % 2 == 1) {
+                    return d[d.length/2 - 0.5]
+                } else {
+                    return (d[d.length/2] + d[d.length/2 -1])/2
+                }
+            })
+        }
+        tmp = tmp + '\n' + allrx[i] + '\t' + z.join('\t')
+    }
+    var e = {};
+    e.target = {};
+    e.target.result = tmp;
+    e = e.target.result.split(/\r\n|\r|\n/);     if (e[e.length-1] == "") {e.pop()}
+    receivedTextFlux(e)
+    closeEdit()
+}
 function downloadEscher() {
     var escher1 = {
         map_name: "new_map",
@@ -1140,16 +1228,20 @@ function previousScrollC(nodeid) {
 }
 function ConcSetSwitch(opt) {
     if(tracking){trackMet()}
-    //Save color
-    var id = concobj.ttls.indexOf(opt.attributes.oldvalue.value);
-    concobj.mcs[id] = metcolor;
-    concobj.mcbs[id] = metcolorbreaks;
     //Define index to switch it to
-    opt.setAttribute('oldvalue',opt.value);
-    var id = concobj.ttls.indexOf(opt.value);
+    //Define index to switch it to
+    var id = opt.selectedIndex;
     //Remove previous color breaks
-    x = document.getElementsByClassName("metbreakcol");
-    while (x.length > 0) {x[0].nextElementSibling.click()}
+    var x = document.getElementsByClassName("metbreakcol");
+    while (x.length > 0) {
+        var tmp = x[0].nextSibling
+        tmp.previousSibling.previousSibling.remove()
+        tmp.previousSibling.remove()
+        tmp.nextSibling.remove()
+        tmp.remove()
+        delete tmp;
+        var x = document.getElementsByClassName("metbreakcol");
+    }
     //Reset color breaks
     metcolorbreaks = concobj.mcbs[id];
     metcolor = concobj.mcs[id]

@@ -21,6 +21,8 @@ var svg,
     link,
     olink,
     node,
+    rectnode,
+    circlenode,
     shiftKey,
     gMain,
     rect,
@@ -889,60 +891,6 @@ function dragended(d) {
 
 function ticked() {
     defineSecondaryPosition()
-
-    //Bezi during simulation (for another time)
-    // graph.nodes.filter((d) => d.group == 1).forEach(function(d){
-    //     //Initialize
-    //     var inx = [],
-    //     iny = [],
-    //     outx = [],
-    //     outy = [];
-
-    //     //Get reaction metabolite position
-    //     graph.links.forEach(function(l){
-    //         if (l.target.id == d.id && !l.source.secondary) {
-    //             inx.push(l.source.x)
-    //             iny.push(l.source.y)
-    //         } else if (l.source.id == d.id && !l.target.secondary) {
-    //             outx.push(l.target.x)
-    //             outy.push(l.target.y)
-    //         }
-    //     })
-
-    //     //If no metabolites connecter return
-    //     if (inx.length == 0 && outx.length == 0) {return;}
-
-    //     //Calculate mean position and adjust by node position
-    //     if (inx.length > 0) {
-    //         inpos = [inx.reduce(function(a, b){ return a + b; })/inx.length, iny.reduce(function(a, b){ return a + b; })/iny.length];
-    //         inpos[0] += 0.5*(d.x-inpos[0])
-    //         inpos[1] += 0.5*(d.y-inpos[1])
-    //     }
-    //     if (outx.length > 0) {
-    //         outpos = [outx.reduce(function(a, b){ return a + b; })/outx.length, outy.reduce(function(a, b){ return a + b; })/outy.length];
-    //         outpos[0] += 0.5*(d.x-outpos[0])
-    //         outpos[1] += 0.5*(d.y-outpos[1])
-    //     }
-        
-    //     //If only reactants or products
-    //     if (inx.length == 0) {
-    //         d.bezi = [-outpos[0] + d.x, -outpos[1] + d.y, outpos[0] - d.x, outpos[1] - d.y];
-    //         return d
-    //     } else if (outx.length == 0) {
-    //         d.bezi = [inpos[0] - d.x, inpos[1] - d.y, -inpos[0] + d.x, -inpos[1] + d.y];
-    //         return d
-    //     }
-
-    //     //If both adjust
-    //     var m = [(inpos[0]+outpos[0])/2, (inpos[1]+outpos[1])/2];
-    //     var diff = [m[0]-d.x, m[1]-d.y];
-    //     inpos[0] -= diff[0];
-    //     inpos[1] -= diff[1];
-    //     outpos[0] -= diff[0];
-    //     outpos[1] -= diff[1];
-    //     d.bezi = [inpos[0] - d.x, inpos[1] - d.y, outpos[0] - d.x, outpos[1] - d.y];
-    //     return d;
-    // })
     
     node.filter(function(d) { return d.trap != -1 && d.group != 5})
     .each(function(d) { 
@@ -956,6 +904,8 @@ function ticked() {
     var as = Number(document.getElementById("arrowsize").value);
     var asfr = 0.5*as;
     var lb = document.getElementById("lbfield").value;
+    var rxnshape = document.getElementById("rxnshape").value == "circle";
+    var metshape = document.getElementById("metshape").value == "circle";
 
     if (document.getElementById("arrows").checked) {
             if (document.getElementById("reversibility").value == "None" || document.getElementById("reversibility").value == "Both Ways") {
@@ -987,16 +937,37 @@ function ticked() {
                     y = d.target.y - sp[1]
                     r = d.atcf;
                 }
+                
                 //Define target reference node
                 if (document.getElementById("hiderxns").checked && d.source.group == 2) {
                     var p4 = [d.target.x,d.target.y];
                     d.ppath = "";
                 } else {
-                    var cst = r - d.target.r - as;
-                    var p3 = [(sp[0]+((r-d.target.r-0.8)*x/r)),(sp[1]+((r-d.target.r-0.8)*y/r))],
-                        p1 = [(sp[0]+(cst*x-y*asfr-0.8)/r) , (sp[1]+(cst*y+x*asfr-0.8)/r)],
+                    if ((d.target.group == 1 && rxnshape) || (d.target.group == 2 && metshape)) { //If target its a circle calculate ofset
+                        var cst = r - d.target.r - as;
+                        var p3 = [(sp[0]+((r-d.target.r-0.8)*x/r)),(sp[1]+((r-d.target.r-0.8)*y/r))];
+                    } else {
+                        if (x < y) {
+                            if (x > -y) {
+                                var cst = r - (d.target.r*r/y) - as;
+                                var p3 = [(sp[0]+(x*(1 - (d.target.r+0.8)/y))),(sp[1]+(y-d.target.r-0.8))];
+                            } else {
+                                var cst = r + (d.target.r*r/x) - as;
+                                var p3 = [(sp[0]+(x+d.target.r+0.8)),(sp[1]+(y*(1 + (d.target.r+0.8)/x)))];
+                            }
+                        } else {
+                            if (x > -y) {
+                                var cst = r - (d.target.r*r/x) - as;
+                                var p3 = [(sp[0]+(x-d.target.r-0.8)),(sp[1]+(y*(1 - (d.target.r+0.8)/x)))];
+                            } else {
+                                var cst = r + (d.target.r*r/y) - as;
+                                var p3 = [(sp[0]+(x*(1 + (d.target.r+0.8)/y))),(sp[1]+(y+d.target.r+0.8))];
+                            }
+                        }
+                    }
+                    var p1 = [(sp[0]+(cst*x-y*asfr-0.8)/r) , (sp[1]+(cst*y+x*asfr-0.8)/r)],
                         p2 = [(sp[0]+(cst*x+y*asfr-0.8)/r) , (sp[1]+(cst*y-x*asfr-0.8)/r)];
-                    var p4 = [((p1[0]+p2[0]+0.1*p3[0])/2.1),((p1[1]+p2[1]+0.1*p3[1])/2.1)];
+                        var p4 = [((p1[0]+p2[0]+0.1*p3[0])/2.1),((p1[1]+p2[1]+0.1*p3[1])/2.1)];
                         d.ppath = "M" + p1[0] + "," + p1[1] + "L" + p2[0] + "," + p2[1] + "L" + p3[0] + "," + p3[1]
                 }
                 if (document.getElementById("reversibility").value == "None" || !rev || (document.getElementById("hiderxns").checked && d.source.group == 1)) {
@@ -1058,28 +1029,66 @@ function ticked() {
                         var p4 = [d.target.x,d.target.y];
                         d.ppath = "";
                     } else {
-                        var cst = r - d.target.r - as,
-                            cst2 = r - d.target.r - 2*as;
-                        var p3 = [(sp[0]+((r-d.target.r-0.8)*x/r)),(sp[1]+((r-d.target.r-0.8)*y/r))],
-                            p1 = [(sp[0]+(cst*x-y*asfr-0.8)/r) , (sp[1]+(cst*y+x*asfr-0.8)/r)],
+                        if ((d.target.group == 1 && rxnshape) || (d.target.group == 2 && metshape)) {
+                            var cst = r - d.target.r - as,
+                                cst2 = r - d.target.r - 2*as;
+                            var p3 = [(sp[0]+((r-d.target.r-0.8)*x/r)),(sp[1]+((r-d.target.r-0.8)*y/r))];
+                        } else {
+                            if (x < y) {
+                                if (x > -y) {
+                                    var cst = r - (d.target.r*r/y) - as;
+                                    var cst2 = cst - as;
+                                    var p3 = [(sp[0]+(x*(1 - (d.target.r+0.8)/y))),(sp[1]+(y-d.target.r-0.8))];
+                                } else {
+                                    var cst = r + (d.target.r*r/x) - as;
+                                    var cst2 = cst - as;
+                                    var p3 = [(sp[0]+(x+d.target.r+0.8)),(sp[1]+(y*(1 + (d.target.r+0.8)/x)))];
+                                }
+                            } else {
+                                if (x > -y) {
+                                    var cst = r - (d.target.r*r/x) - as;
+                                    var cst2 = cst - as;
+                                    var p3 = [(sp[0]+(x-d.target.r-0.8)),(sp[1]+(y*(1 - (d.target.r+0.8)/x)))];
+                                } else {
+                                    var cst = r + (d.target.r*r/y) - as;
+                                    var cst2 = cst - as;
+                                    var p3 = [(sp[0]+(x*(1 + (d.target.r+0.8)/y))),(sp[1]+(y+d.target.r+0.8))];
+                                }
+                            }
+                        }
+                        p1 = [(sp[0]+(cst*x-y*asfr-0.8)/r) , (sp[1]+(cst*y+x*asfr-0.8)/r)],
                             p2 = [(sp[0]+(cst*x+y*asfr-0.8)/r) , (sp[1]+(cst*y-x*asfr-0.8)/r)],
                             p5 = [(sp[0]+((cst2+0.8)*x/r)),(sp[1]+((cst2+0.8)*y/r))];
                         var p4 = [((p1[0]+p2[0]+0.1*p3[0])/2.1),((p1[1]+p2[1]+0.1*p3[1])/2.1)];
                             d.ppath = "M" + p1[0] + "," + p1[1] + "L" + p3[0] + "," + p3[1] + "L" + p2[0] + "," + p2[1] + "L" + p5[0] + "," + p5[1];
                     }
                 } else {
-                    //Define target reference node
-                    if (document.getElementById("hiderxns").checked && d.target.group == 1) {
-                        var p4 = [d.target.x,d.target.y];
-                        d.ppath = "";
-                    } else {
+                    if ((d.target.group == 1 && rxnshape) || (d.target.group == 2 && metshape)) { //If target its a circle calculate ofset
                         var cst = r - d.target.r - as;
-                        var p3 = [(sp[0]+((r-d.target.r-0.8)*x/r)),(sp[1]+((r-d.target.r-0.8)*y/r))],
-                            p1 = [(sp[0]+(cst*x-y*asfr-0.8)/r) , (sp[1]+(cst*y+x*asfr-0.8)/r)],
-                            p2 = [(sp[0]+(cst*x+y*asfr-0.8)/r) , (sp[1]+(cst*y-x*asfr-0.8)/r)];
-                        var p4 = [((p1[0]+p2[0]+0.1*p3[0])/2.1),((p1[1]+p2[1]+0.1*p3[1])/2.1)];
-                            d.ppath = "M" + p1[0] + "," + p1[1] + "L" + p2[0] + "," + p2[1] + "L" + p3[0] + "," + p3[1]
+                        var p3 = [(sp[0]+((r-d.target.r-0.8)*x/r)),(sp[1]+((r-d.target.r-0.8)*y/r))];
+                    } else {
+                        if (x < y) {
+                            if (x > -y) {
+                                var cst = r - (d.target.r*r/y) - as;
+                                var p3 = [(sp[0]+(x*(1 - (d.target.r+0.8)/y))),(sp[1]+(y-d.target.r-0.8))];
+                            } else {
+                                var cst = r + (d.target.r*r/x) - as;
+                                var p3 = [(sp[0]+(x+d.target.r+0.8)),(sp[1]+(y*(1 + (d.target.r+0.8)/x)))];
+                            }
+                        } else {
+                            if (x > -y) {
+                                var cst = r - (d.target.r*r/x) - as;
+                                var p3 = [(sp[0]+(x-d.target.r-0.8)),(sp[1]+(y*(1 - (d.target.r+0.8)/x)))];
+                            } else {
+                                var cst = r + (d.target.r*r/y) - as;
+                                var p3 = [(sp[0]+(x*(1 + (d.target.r+0.8)/y))),(sp[1]+(y+d.target.r+0.8))];
+                            }
+                        }
                     }
+                    var p1 = [(sp[0]+(cst*x-y*asfr-0.8)/r) , (sp[1]+(cst*y+x*asfr-0.8)/r)],
+                        p2 = [(sp[0]+(cst*x+y*asfr-0.8)/r) , (sp[1]+(cst*y-x*asfr-0.8)/r)];
+                        var p4 = [((p1[0]+p2[0]+0.1*p3[0])/2.1),((p1[1]+p2[1]+0.1*p3[1])/2.1)];
+                        d.ppath = "M" + p1[0] + "," + p1[1] + "L" + p2[0] + "," + p2[1] + "L" + p3[0] + "," + p3[1]
                 }
                 //Define path
                 if (d.source.bezi[0] != null && d.target.bezi[0] != null) {
@@ -1133,9 +1142,29 @@ function ticked() {
                     r = d.atcf;
                 }
                 //Define arrowhead
-                var cst = r - d.source.r - as;
-                var p3 = [(sp[0]+((r-d.source.r-0.8)*x/r)),(sp[1]+((r-d.source.r-0.8)*y/r))],
-                    p1 = [(sp[0]+(cst*x-y*asfr-0.8)/r) , (sp[1]+(cst*y+x*asfr-0.8)/r)],
+                if ((d.source.group == 1 && rxnshape) || (d.source.group == 2 && metshape)) {
+                    var cst = r - d.source.r - as;
+                    var p3 = [(sp[0]+((r-d.source.r-0.8)*x/r)),(sp[1]+((r-d.source.r-0.8)*y/r))];
+                } else {
+                    if (x < y) {
+                        if (x > -y) {
+                            var cst = r - (d.source.r*r/y) - as;
+                            var p3 = [(sp[0]+(x*(1 - (d.source.r+0.8)/y))),(sp[1]+(y-d.source.r-0.8))];
+                        } else {
+                            var cst = r + (d.source.r*r/x) - as;
+                            var p3 = [(sp[0]+(x+d.source.r+0.8)),(sp[1]+(y*(1 + (d.source.r+0.8)/x)))];
+                        }
+                    } else {
+                        if (x > -y) {
+                            var cst = r - (d.source.r*r/x) - as;
+                            var p3 = [(sp[0]+(x-d.source.r-0.8)),(sp[1]+(y*(1 - (d.source.r+0.8)/x)))];
+                        } else {
+                            var cst = r + (d.source.r*r/y) - as;
+                            var p3 = [(sp[0]+(x*(1 + (d.source.r+0.8)/y))),(sp[1]+(y+d.source.r+0.8))];
+                        }
+                    }
+                }
+                var p1 = [(sp[0]+(cst*x-y*asfr-0.8)/r) , (sp[1]+(cst*y+x*asfr-0.8)/r)],
                     p2 = [(sp[0]+(cst*x+y*asfr-0.8)/r) , (sp[1]+(cst*y-x*asfr-0.8)/r)];
                 var p4 = [((p1[0]+p2[0]+0.1*p3[0])/2.1),((p1[1]+p2[1]+0.1*p3[1])/2.1)];
                     d.ppath = d.ppath + "M" + p1[0] + "," + p1[1] + "L" + p2[0] + "," + p2[1] + "L" + p3[0] + "," + p3[1];
@@ -1213,8 +1242,10 @@ function ticked() {
         }
     }
 
-    node.attr("cx", function(d) { return d.x; })
+    circlenode.attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
+    rectnode.attr("x", function(d) { return d.x-d.r; })
+        .attr("y", function(d) { return d.y-d.r; });
 
 }
 
@@ -1243,10 +1274,36 @@ function defineSimulation() {
 
     node = gDraw.append("g")
     .attr("class", "node")
-    .selectAll("circle")
+    
+    node = node.selectAll(".node")
     .data(graph.nodes)
-    .enter().append("circle")
-    .attr("fill", defineNodeColor)
+    .enter()
+
+    if (document.getElementById("rxnshape").value == "rect") {
+        node.filter(function(d){return d.group == 1})
+        .append("rect").attr("class","rectnode")
+    } else {
+        node.filter(function(d){return d.group == 1})
+        .append("circle").attr("class","circlenode")
+    }
+    
+
+    if (document.getElementById("metshape").value == "rect") {
+        node.filter(function(d){return d.group == 2})
+        .append("rect").attr("class","rectnode")
+    } else {
+        node.filter(function(d){return d.group == 2})
+        .append("circle").attr("class","circlenode")
+    }
+
+    node.filter(function(d){return d.group != 1 && d.group != 2})
+        .append("circle").attr("class","circlenode")
+
+    node = d3.selectAll(".rectnode,.circlenode")
+    rectnode = d3.selectAll(".rectnode")
+    circlenode = d3.selectAll(".circlenode")
+
+    node.attr("fill", defineNodeColor)
     .attr("stroke", defineNodeColor)
     .call(d3.drag()
     .on("start", dragstarted)
@@ -1354,4 +1411,3 @@ function reDefineSimulation() {
     defineSuspended()
     simulation.restart()
 }
-

@@ -1,4 +1,6 @@
 #Uploading the package
+#Remove build,dist,sammi.egg-info
+#Define new version
 #python setup.py sdist bdist_wheel #Writes the package
 #python -m twine upload dist/* #Uploads
 import setuptools
@@ -8,7 +10,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="sammi",
-    version="0.0.15",
+    version="0.1.2",
     author="Andre Schultz",
     author_email="schultzdre@gmail.com",
     description="A wrapper for running the Semi-Automated Metabolic Map Illustrator (SAMMI) using Python",
