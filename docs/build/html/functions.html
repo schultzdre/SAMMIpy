@@ -1,0 +1,259 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="Python" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="Python" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Functions &mdash; SAMMIpy 0.0.12 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Classes" href="classes.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> SAMMIpy
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="classes.html">Classes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#plotting">Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#opening-a-visualization">Opening a visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-sammipy-example">Running SAMMIpy example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SAMMIpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/functions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="functions">
+<h1>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h1>
+<p>There are three main user functions for rendering and plotting SAMMI visualizations. These are:</p>
+<div class="section" id="plotting">
+<h2>Plotting<a class="headerlink" href="#plotting" title="Permalink to this headline">¶</a></h2>
+<p>The function <code class="code docutils literal notranslate"><span class="pre">sammi.plot()</span></code> is used to plot SAMMI visualizations in combination with the SAMMI classes. The function inputs are:</p>
+<ul>
+<li><p class="first"><strong>model</strong>: COBRApy model to be visualized.</p>
+</li>
+<li><p class="first"><strong>parsert</strong>: How the model is to be parsed and visualized. There are several options for this parameter:</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>Empty vector</em>: Default. Does not parse the model and plots all reactions and metabolites in a single graph. Not recommended for medium to large-size models.</li>
+<li><em>string</em>: One of two options. (1) A reaction or metabolite field (e.g. <code class="code docutils literal notranslate"><span class="pre">subsystem</span></code> or <code class="code docutils literal notranslate"><span class="pre">compartment</span></code>), in which case a subgraph will be drawn for each unique value associated with that field. (2) A path to a file specifying a previously drawn SAMMI map, in which case that map will be rendered.</li>
+<li><em>List of strings</em>: List of reaction IDs to be plotted. A single graph will be plotted containing only the defined reactions.</li>
+<li><em>List of sammi.parser() objects</em>: A subgraph is plotted for each <code class="code docutils literal notranslate"><span class="pre">sammi.parser()</span></code> object defined in the list.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>datat</strong>: List of <code class="code docutils literal notranslate"><span class="pre">sammi.data()</span></code> objects. Each object will be plotted separately in the visualization.</p>
+</li>
+<li><p class="first"><strong>secondaries</strong>: List of strings or regular expressions. Any metabolite, in any subgraph, matching any of the regular expressions defined here will be shelved. These metabolites are not deleted and can be returned to the graph through the floating menu window. For details of this functionality please refer to the SAMMI documentation.</p>
+</li>
+<li><p class="first"><strong>opts</strong>: <code class="code docutils literal notranslate"><span class="pre">sammi.options()</span></code> object. Additional options for loading the map.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="opening-a-visualization">
+<h2>Opening a visualization<a class="headerlink" href="#opening-a-visualization" title="Permalink to this headline">¶</a></h2>
+<p>the function <code class="code docutils literal notranslate"><span class="pre">sammi.openmap()</span></code> is used for opening previously drawn visualizations. It takes a single input: a previously drawn html file name. For instance, <code class="code docutils literal notranslate"><span class="pre">sammi.openmap(&quot;index_load.html&quot;)</span></code> or <code class="code docutils literal notranslate"><span class="pre">sammi.openmap(&quot;index_load&quot;)</span></code> open the default file to which maps are exported.</p>
+</div>
+<div class="section" id="running-sammipy-example">
+<h2>Running SAMMIpy example<a class="headerlink" href="#running-sammipy-example" title="Permalink to this headline">¶</a></h2>
+<p>Several examples are built into the SAMMIpy package to exemplify and test the package functionalities. These examples are described in the following section as well as the Jupyter Notebook provided. To use this function run <code class="code docutils literal notranslate"><span class="pre">sammi.test(n)</span></code> where <code class="code docutils literal notranslate"><span class="pre">n</span></code> is a number from zero to eleven describing one of the examples.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="classes.html" class="btn btn-neutral" title="Classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Andre Schultz
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'0.0.12',
+              LANGUAGE:'Python',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
