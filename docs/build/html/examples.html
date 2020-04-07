@@ -17,33 +17,35 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Functions" href="functions.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -180,7 +182,7 @@
 <div class="section" id="divide-the-model-into-subgraphs-using-model-annotation">
 <h2>1-2. Divide the model into subgraphs using model annotation<a class="headerlink" href="#divide-the-model-into-subgraphs-using-model-annotation" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Maps can be divided into subgraphs using model annotation. For instance, users can plot a subgraph for each annotated reaction subsystem:</li>
+<li><p>Maps can be divided into subgraphs using model annotation. For instance, users can plot a subgraph for each annotated reaction subsystem:</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;salmonella&quot;</span><span class="p">)</span>
@@ -189,7 +191,7 @@
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>Or plot a map for each cellular compartment:</li>
+<li><p>Or plot a map for each cellular compartment:</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;textbook&quot;</span><span class="p">)</span>
@@ -277,7 +279,7 @@
 <div class="section" id="data-mapping">
 <h2>7-8. Data mapping<a class="headerlink" href="#data-mapping" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple" start="7">
-<li>Add data to plotted subgraphs. In this example we are generating random data and mapping it onto the desired reactions. Using <code class="code docutils literal notranslate"><span class="pre">sammi.parser()</span></code> users can directly map data as reaction colors:</li>
+<li><p>Add data to plotted subgraphs. In this example we are generating random data and mapping it onto the desired reactions. Using <code class="code docutils literal notranslate"><span class="pre">sammi.parser()</span></code> users can directly map data as reaction colors:</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;textbook&quot;</span><span class="p">)</span>
@@ -296,7 +298,7 @@
 </pre></div>
 </div>
 <ol class="arabic simple" start="8">
-<li>Alternatively, users can map data onto the map using <code class="code docutils literal notranslate"><span class="pre">sammi.data()</span></code>. The following example maps five sets of random data, each in a different way, with three conditions each.</li>
+<li><p>Alternatively, users can map data onto the map using <code class="code docutils literal notranslate"><span class="pre">sammi.data()</span></code>. The following example maps five sets of random data, each in a different way, with three conditions each.</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get sample model to plot</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">cobra</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">create_test_model</span><span class="p">(</span><span class="s2">&quot;salmonella&quot;</span><span class="p">)</span>
@@ -423,10 +425,10 @@
 <h2>11. Metabolic Adaptation<a class="headerlink" href="#metabolic-adaptation" title="Permalink to this headline">¶</a></h2>
 <p>Visualize adaptation to gene knockout. In short, the following code performs the following steps for each reaction we wish to simulate.</p>
 <ol class="arabic simple">
-<li>Simulate reaction knockout and get maximum growth rate on KO model.</li>
-<li>Set upper and lower bound growth rate on wild-type model to KO growth rate and calculate a loopless flux distribution.</li>
-<li>Using MOMA, calculate a flux distribution in the knockout strain that closely matches the flux distribution in the previous step.</li>
-<li>Find the difference in flux distributions in steps two and three and plot them.</li>
+<li><p>Simulate reaction knockout and get maximum growth rate on KO model.</p></li>
+<li><p>Set upper and lower bound growth rate on wild-type model to KO growth rate and calculate a loopless flux distribution.</p></li>
+<li><p>Using MOMA, calculate a flux distribution in the knockout strain that closely matches the flux distribution in the previous step.</p></li>
+<li><p>Find the difference in flux distributions in steps two and three and plot them.</p></li>
 </ol>
 <p>This process allows users to visualize how the flux was rewired in the knockout strain. This example may take a couple of minutes to run.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cobra.flux_analysis</span> <span class="kn">import</span> <span class="n">single_reaction_deletion</span><span class="p">,</span> <span class="n">moma</span>
@@ -489,7 +491,7 @@
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="functions.html" class="btn btn-neutral" title="Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="functions.html" class="btn btn-neutral float-left" title="Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -515,35 +517,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'0.0.12',
-              LANGUAGE:'Python',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -14,6 +14,9 @@ SAMMIpy is a tool for visualizing metabolic networks and metabolic network simul
 <https://sammi.readthedocs.io/en/latest/index.html>`_, and the documentation for COBRApy `here
 <https://cobrapy.readthedocs.io/en/stable/>`_.
 
+If you use SAMMI for your project, please cite the following `publication
+<https://doi-org.stanford.idm.oclc.org/10.1093/bioinformatics/btz927>`_: Schultz, A., & Akbani, R. (2019). SAMMI: A Semi-Automated Tool for the Visualization of Metabolic Networks. *Bioinformatics*.
+
 Installation and Usage
 ===================================
 SAMMIpy can be installed via :code:`pip` by running the following code in the command window:
